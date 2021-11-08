@@ -17,7 +17,7 @@ after_success:
   # Log in to the docker CLI > Create DOCKER_PASSWORD and DOCKER_ID in TravisCI or CircleCI environmet variables for this project
   # Automatically logs into docker hub
   - echo "DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
-  #Push images to docker hub
+  #Push all images to docker hub
   - docker push jhaineault1/multi-client
   - docker push jhaineault1/multi-nginx
   - docker push jhaineault1/multi-server
