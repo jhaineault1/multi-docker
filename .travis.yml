@@ -1,0 +1,24 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t jhaineault1/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true jhaineault1/react-test npm test
+
+after_success:
+  - docker build -t jhaineault1/multi-client ./client
+  - docker build -t jhaineault1/multi-nginx ./nginx
+  - docker build -t jhaineault1/multi-server ./server
+  - docker build -t jhaineault1/worker ./worker
+  # Log in to the docker CLI > Create DOCKER_PASSWORD and DOCKER_ID in TravisCI or CircleCI environmet variables for this project
+  # Automatically logs into docker hub
+  - echo "DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+  #Push images to docker hub
+  - docker push jhaineault1/multi-client
+  - docker push jhaineault1/multi-nginx
+  - docker push jhaineault1/multi-server
+  - docker push jhaineault1/multi-worker
